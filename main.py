@@ -36,6 +36,7 @@ args = parser.parse_args()
 args.device = 'cpu'
 torch.manual_seed(args.seed)
 if torch.cuda.is_available():
+    print('Using GPU acceleration.')
     torch.cuda.manual_seed(args.seed)
     args.device = 'cuda:0'
 dataset = TUDataset(os.path.join('data',args.dataset),name=args.dataset)
@@ -92,9 +93,9 @@ for epoch in range(args.epochs):
     else:
         patience += 1
     if patience > args.patience:
-        break 
+        break
 
 model = Net(args).to(args.device)
 model.load_state_dict(torch.load('latest.pth'))
 test_acc,test_loss = test(model,test_loader)
-print("Test accuarcy:{}".fotmat(test_acc))
+print("Test accuarcy:{}".format(test_acc))
